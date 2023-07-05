@@ -3,6 +3,9 @@ agent any
 tools {
   terraform 'terraform'
 }
+parameters {
+  string(name: 'tfm', description: 'Terraform module to act upon.')
+}
  stages { 
    stage ('Checkout Repo') { 
      steps { 
@@ -30,8 +33,7 @@ stage ('Terraform init') {
   steps {
    sh '''
    cd tf-script/ECR/dev-ecr/
-   terraform plan -out=tfplan.out
-   terraform show -json tfplan.out
+   terragrunt plan -out=plan.tfplan -no-color --terragrunt-source '/var/temp/tf_modules//${params.tfm}
    ''' 
    }
    }
