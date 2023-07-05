@@ -21,6 +21,14 @@ stage ('Terraform version') {
    ''' 
     }
     }
+ stage ('Terraform plan') { 
+  steps {
+   sh '''
+   cd cd tf-script/ECR/dev-ecr/
+   terraform plan -out=tfplan.out
+   ''' 
+   }
+   }
 stage('TF Apply') {
     // only execute stage if apply is desired
     when { expression { return env.Action == 'apply' } }
