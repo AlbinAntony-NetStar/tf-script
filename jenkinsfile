@@ -22,6 +22,7 @@ stage ('Terraform init') {
   steps {
    sh '''
    pwd
+   ls
    terraform init
    ''' 
    }
