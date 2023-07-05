@@ -21,7 +21,7 @@ stage ('Terraform version') {
 stage ('Terraform init') { 
   steps {
    sh '''
-   cd dev-ecr/
+   cd ECR/dev-ecr/
    terraform init
    ''' 
    }
@@ -29,7 +29,7 @@ stage ('Terraform init') {
   stage ('Terraform plan') { 
   steps {
    sh '''
-   cd dev-ecr/
+   cd ECR/dev-ecr/
    terraform plan -out=tfplan.out
    terraform show -json tfplan.out
    ''' 
