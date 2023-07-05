@@ -24,7 +24,7 @@ stage ('Terraform version') {
  stage ('Terraform plan') { 
   steps {
    sh '''
-   cd cd tf-script/ECR/dev-ecr/
+   cd tf-script/ECR/dev-ecr/
    terraform plan -out=tfplan.out
    ''' 
    }
