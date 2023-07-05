@@ -15,14 +15,13 @@ stage ('Terraform version') {
   steps {
    sh '''
     terraform --version
-    whoami
    ''' 
     }
     }
 stage ('Terraform init') { 
   steps {
    sh '''
-   whoami
+   cd tf-script/ECR/dev-ecr/
    terraform init
    ''' 
    }
