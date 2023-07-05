@@ -21,7 +21,7 @@ stage ('Terraform version') {
 stage ('Terraform init') { 
   steps {
    sh '''
-   cd ECR/dev-ecr/
+   pwd
    terraform init
    ''' 
    }
