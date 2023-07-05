@@ -21,6 +21,14 @@ stage ('Terraform version') {
    ''' 
     }
     }
+stage ('Terraform init') { 
+  steps {
+   sh '''
+   cd tf-script/ECR/dev-ecr/
+   terraform init
+   ''' 
+   }
+   }
  stage ('Terraform plan') { 
   steps {
    sh '''
