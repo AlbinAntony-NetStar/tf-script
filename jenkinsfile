@@ -15,6 +15,7 @@ stage ('Terraform version') {
   steps {
    sh '''
     terraform --version
+    whoami
    ''' 
     }
     }
