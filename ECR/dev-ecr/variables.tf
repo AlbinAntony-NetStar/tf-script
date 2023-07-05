@@ -1,7 +1,7 @@
 variable "ecr_name" {
   description = "The list of ecr names to create"
   type        = list(string)
-  default     = ["dev-uds-api", "dev-uds-app", "dev-uds-jenkins"]
+  default     = ["dev-uds-api", "dev-uds-app" ]
 }
 variable "tags" {
   description = "The key-value maps for tagging"
