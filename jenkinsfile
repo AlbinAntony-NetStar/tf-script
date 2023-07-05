@@ -4,7 +4,7 @@ tools {
   terraform 'terraform'
 }
 parameters {
-  string(name: 'USER_INPUT', description: 'Terraform module to act upon.')
+  string(name: 'Action', description: 'Terraform module to act upon.')
 }
  stages { 
    stage ('Checkout Repo') { 
@@ -21,22 +21,19 @@ stage ('Terraform version') {
    ''' 
     }
     }
-stage ('Terraform init') { 
-  steps {
-   sh '''
-   cd tf-script/ECR/dev-ecr/
-   terraform init
-   ''' 
-   }
-   }
-stage('plan&apply'){
-  if ${USER_INPUT} == "plan"{
+stage('TF Apply') {
+    // only execute stage if apply is desired
+    when { expression { return env.Action == 'apply' } }
+    steps {
+      // query for user approval of plan
+      input(message: 'Click "proceed" to approve the above Terraform Plan')
+      // apply the plan if approved
+    sh '''
+    cd tf-script/ECR/dev-ecr/
     terraform plan
-  }
-  else{
-   terraform apply -auto-approve
-  }
-   }
+    ''' 
+    }
 
         }
+ }
 }
