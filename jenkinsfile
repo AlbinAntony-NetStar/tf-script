@@ -33,7 +33,7 @@ stage ('Terraform init') {
   steps {
    sh '''
    cd tf-script/ECR/dev-ecr/
-   terragrunt plan -out=plan.tfplan -no-color --terragrunt-source '/var/temp/tf_modules//${params.tfm}
+   terragrunt plan -out=plan.tfplan -no-color --terragrunt-source '/var/temp/tf_modules//${params.tfm}' 
    ''' 
    }
    }
