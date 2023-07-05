@@ -21,7 +21,7 @@ stage ('Terraform version') {
 stage ('Terraform init') { 
   steps {
    sh '''
-   tf-script/ECR/dev-ecr/
+   whoami
    terraform init
    ''' 
    }
