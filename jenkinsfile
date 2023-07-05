@@ -4,7 +4,7 @@ tools {
   terraform 'terraform'
 }
 parameters {
-  string(name: 'tfm', description: 'Terraform module to act upon.')
+  string(name: 'USER_INPUT', description: 'Terraform module to act upon.')
 }
  stages { 
    stage ('Checkout Repo') { 
@@ -29,13 +29,13 @@ stage ('Terraform init') {
    ''' 
    }
    }
-  stage ('Terraform plan') { 
-  steps {
-   sh '''
-   cd tf-script/ECR/dev-ecr/
-   terragrunt plan -out=plan.tfplan -no-color --terragrunt-source '/var/temp/tf_modules//${params.tfm}' 
-   ''' 
-   }
+stage('plan&apply'){
+  if ${USER_INPUT} == "plan"{
+    terraform plan
+  }
+  else{
+   terraform apply -auto-approve
+  }
    }
 
         }
