@@ -55,11 +55,11 @@ stage ('Terraform Destroy Output') {
   steps {
    sh '''
    cd tf-script/ECR/dev-ecr/
-   terraform destroy
+   terraform plan -destroy
    ''' 
    }
    }
-   
+
 stage('TF Destroy') {
     // only execute stage if apply is desired
     when { expression { return env.Action == 'destroy' } }
