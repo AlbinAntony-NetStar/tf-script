@@ -7,29 +7,17 @@ parameters {
   string(name: 'Action', description: 'Terraform module to act upon.')
 }
  stages { 
-   stage ('Checkout Repo') { 
+   stage ('Checkout Repo & TF init') { 
      steps { 
        cleanWs()
-       sh  'git clone https://github.com/AlbinAntony-NetStar/tf-script.git'
+       sh  '''
+       git clone https://github.com/AlbinAntony-NetStar/tf-script.git
+       cd tf-script/ECR/dev-ecr/
+       terraform init
+       '''
       }
       } 
-
-stage ('Terraform version') { 
-  steps {
-   sh '''
-    terraform --version
-   ''' 
-    }
-    }
-stage ('Terraform init') { 
-  steps {
-   sh '''
-   cd tf-script/ECR/dev-ecr/
-   terraform init
-   ''' 
-   }
-   }
- stage ('Terraform plan') { 
+ stage ('TF plan') { 
   steps {
    sh '''
    cd tf-script/ECR/dev-ecr/
@@ -51,14 +39,20 @@ stage('TF Apply') {
     }
 
         }
-stage ('Terraform Destroy Output') { 
-  steps {
-   sh '''
-   cd tf-script/ECR/dev-ecr/
-   terraform plan -destroy
-   ''' 
-   }
-   }
+stage('TF Destroy Plan') {
+    // only execute stage if apply is desired
+    when { expression { return env.Action == 'destroy-plan' } }
+    steps {
+      // query for user approval of plan
+      input(message: 'Click "proceed" to approve the above Terraform Plan')
+      // apply the plan if approved
+    sh '''
+    cd tf-script/ECR/dev-ecr/
+    terraform plan -destroy
+    ''' 
+    }
+
+        }
 
 stage('TF Destroy') {
     // only execute stage if apply is desired
