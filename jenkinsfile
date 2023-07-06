@@ -51,5 +51,19 @@ stage('TF Apply') {
     }
 
         }
+stage('TF Destroy') {
+    // only execute stage if apply is desired
+    when { expression { return env.Action == 'destroy' } }
+    steps {
+      // query for user approval of plan
+      input(message: 'Click "proceed" to approve the above Terraform Plan')
+      // apply the plan if approved
+    sh '''
+    cd tf-script/ECR/dev-ecr/
+    terraform destroy --auto-approve"
+    ''' 
+    }
+
+        }
  }
 }
