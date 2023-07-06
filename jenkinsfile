@@ -46,7 +46,7 @@ stage('TF Apply') {
       // apply the plan if approved
     sh '''
     cd tf-script/ECR/dev-ecr/
-    terraform plan
+    terraform apply --auto-approve
     ''' 
     }
 
