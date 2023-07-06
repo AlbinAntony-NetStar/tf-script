@@ -52,6 +52,12 @@ stage('TF Apply') {
 
         }
 stage('TF Destroy') {
+     steps {
+   sh '''
+   cd tf-script/ECR/dev-ecr/
+   terraform destroy
+   ''' 
+   }
     // only execute stage if apply is desired
     when { expression { return env.Action == 'destroy' } }
     steps {
@@ -60,7 +66,7 @@ stage('TF Destroy') {
       // apply the plan if approved
     sh '''
     cd tf-script/ECR/dev-ecr/
-    terraform destroy --auto-approve"
+    terraform destroy --auto-approve
     ''' 
     }
 
