@@ -35,6 +35,7 @@ stage('TF Apply') {
       // apply the plan if approved
     sh '''
     cd tf-script/ECR/dev-ecr/
+    terraform plan -out=tfplan.out
     terraform apply "tfplan.out"
     ''' 
     }
