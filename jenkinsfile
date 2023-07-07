@@ -3,7 +3,9 @@ agent any
 tools {
   terraform 'terraform'
 }
-properties([parameters([choice(choices: ['plan', 'apply', 'destroy-plan', 'destroy'], description: 'Please Select the Action', name: 'Action')])])
+parameters { 
+  choice(choices: ['plan', 'apply', 'destroy-plan', 'destroy'], description: 'Please Select the Action', name: 'Action')
+}
  stages { 
    stage ('Checkout Repo & TF init') { 
      steps { 
@@ -16,9 +18,8 @@ properties([parameters([choice(choices: ['plan', 'apply', 'destroy-plan', 'destr
       }
       } 
  stage ('TF plan') { 
- // only execute stage if apply is desired
-    when { expression { return env.Action == 'plan' } }
-    steps {
+   when { expression { return env.Action == 'plan' } }
+   steps {
    sh '''
    cd tf-script/ECR/dev-ecr/
    terraform plan -out=tfplan.out
