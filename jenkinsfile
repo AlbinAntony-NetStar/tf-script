@@ -3,9 +3,7 @@ agent any
 tools {
   terraform 'terraform'
 }
-parameters {
-  string(name: 'Action', description: 'Terraform module to act upon.')
-}
+properties([parameters([choice(choices: ['plan', 'apply', 'destroy-plan', 'destroy'], description: 'Please Select the Action', name: 'Action')])])
  stages { 
    stage ('Checkout Repo & TF init') { 
      steps { 
@@ -18,7 +16,9 @@ parameters {
       }
       } 
  stage ('TF plan') { 
-  steps {
+ // only execute stage if apply is desired
+    when { expression { return env.Action == 'plan' } }
+    steps {
    sh '''
    cd tf-script/ECR/dev-ecr/
    terraform plan -out=tfplan.out
@@ -43,9 +43,6 @@ stage('TF Destroy Plan') {
     // only execute stage if apply is desired
     when { expression { return env.Action == 'destroy-plan' } }
     steps {
-      // query for user approval of plan
-      input(message: 'Click "proceed" to approve the above Terraform Plan')
-      // apply the plan if approved
     sh '''
     cd tf-script/ECR/dev-ecr/
     terraform plan -destroy
