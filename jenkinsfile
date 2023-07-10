@@ -23,7 +23,7 @@ parameters {
    steps {
    sh '''
    cd tf-script/ECR/dev-ecr/
-   sed -i 's/dev-ecr-1/env.Name/g' variables.tf
+   sed -i 's/dev-ecr-1/${env.Name}/g' variables.tf
    cat variables.tf
    terraform plan -out=tfplan.out
    ''' 
