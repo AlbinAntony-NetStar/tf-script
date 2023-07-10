@@ -5,7 +5,7 @@ tools {
 }
 parameters { 
   choice(choices: ['plan', 'apply', 'destroy-plan', 'destroy'], description: 'Please Select the Action', name: 'Action')
-  string(defaultValue: 'dev-ecr-1', name: 'Name-for-ECR' ,description: 'Please Enter the name for ECR')
+  string(defaultValue: 'dev-ecr-1', name: 'Name' ,description: 'Please Enter the name for ECR')
 }
  stages { 
    stage ('Checkout Repo & TF init') { 
@@ -23,7 +23,7 @@ parameters {
    steps {
    sh '''
    cd tf-script/ECR/dev-ecr/
-   sed -i 's/dev-ecr-1/$env.Name-for-ECR/g' variables.tf
+   sed -i 's/dev-ecr-1/env.Name/g' variables.tf
    cat variables.tf
    terraform plan -out=tfplan.out
    ''' 
