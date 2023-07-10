@@ -13,7 +13,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-  bucket = "tf-script-al"
+  bucket = "tf-al"
   key = "dev/terraform.tfstate"
   region = "ap-south-1"
   }
