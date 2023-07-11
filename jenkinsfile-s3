@@ -13,7 +13,7 @@ parameters {
        cleanWs()
        sh  '''
        git clone https://github.com/AlbinAntony-NetStar/tf-script.git
-       cd tf-script/ECR/dev-ecr/
+       cd tf-script/S3/
        terraform init
        '''
       }
