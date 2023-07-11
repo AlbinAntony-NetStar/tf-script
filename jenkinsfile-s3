@@ -36,7 +36,7 @@ stage('TF Apply') {
       // apply the plan if approved
     sh '''
     cd tf-script/S3/
-    terraform plan -out=tfplan.out
+    terraform plan  -var bucket_name=${Name} -out=tfplan.out
     terraform apply "tfplan.out"
     ''' 
     }
