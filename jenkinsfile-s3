@@ -1,0 +1,72 @@
+pipeline {
+agent any
+tools {
+  terraform 'terraform'
+}
+parameters { 
+  choice(choices: ['plan', 'apply', 'destroy-plan', 'destroy'], description: 'Please Select the Action', name: 'Action')
+  string(defaultValue: 'dev-ecr-1', name: 'Name' ,description: 'Please Enter the name for ECR')
+}
+ stages { 
+   stage ('Checkout Repo & TF init') { 
+     steps { 
+       cleanWs()
+       sh  '''
+       git clone https://github.com/AlbinAntony-NetStar/tf-script.git
+       cd tf-script/ECR/dev-ecr/
+       terraform init
+       '''
+      }
+      } 
+ stage ('TF plan') { 
+   when { expression { return env.Action == 'plan' } }
+   steps {
+   sh '''
+   cd tf-script/S3/
+   terraform plan  -var bucket_name=${Name}-out=tfplan.out
+   ''' 
+   }
+   }
+stage('TF Apply') {
+    // only execute stage if apply is desired
+    when { expression { return env.Action == 'apply' } }
+    steps {
+      // query for user approval of plan
+      input(message: 'Click "proceed" to approve the above Terraform Plan')
+      // apply the plan if approved
+    sh '''
+    cd tf-script/S3/
+    terraform plan -out=tfplan.out
+    terraform apply "tfplan.out"
+    ''' 
+    }
+
+        }
+stage('TF Destroy Plan') {
+    // only execute stage if apply is desired
+    when { expression { return env.Action == 'destroy-plan' } }
+    steps {
+    sh '''
+    cd tf-script/S3/
+    terraform plan -destroy
+    ''' 
+    }
+
+        }
+
+stage('TF Destroy') {
+    // only execute stage if apply is desired
+    when { expression { return env.Action == 'destroy' } }
+    steps {
+      // query for user approval of plan
+      input(message: 'Click "proceed" to approve the above Terraform Plan')
+      // apply the plan if approved
+    sh '''
+    cd tf-script/S3/
+    terraform destroy --auto-approve
+    ''' 
+    }
+
+        }
+ }
+}
