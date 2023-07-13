@@ -66,6 +66,7 @@ stage('TF Destroy') {
     cd tf-script/S3/
     aws s3 cp s3://tf-al/S3/${Name}/terraform.tfstate .
     terraform destroy --auto-approve
+    aws s3 rm cp s3://tf-al/S3/${Name}
     ''' 
     }
 
