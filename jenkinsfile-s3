@@ -38,6 +38,7 @@ stage('TF Apply') {
     cd tf-script/S3/
     terraform plan  -var bucket_name=${Name} -out=tfplan.out
     terraform apply "tfplan.out"
+    aws s3 cp terraform.tfstate s3://tf-al/S3/${Name}/terraform.tfstate
     ''' 
     }
 
@@ -48,6 +49,7 @@ stage('TF Destroy Plan') {
     steps {
     sh '''
     cd tf-script/S3/
+    aws s3 cp s3://tf-al/S3/${Name}/terraform.tfstate .
     terraform plan -destroy
     ''' 
     }
@@ -63,6 +65,7 @@ stage('TF Destroy') {
       // apply the plan if approved
     sh '''
     cd tf-script/S3/
+    aws s3 cp s3://tf-al/S3/${Name}/terraform.tfstate .
     terraform destroy --auto-approve
     ''' 
     }
