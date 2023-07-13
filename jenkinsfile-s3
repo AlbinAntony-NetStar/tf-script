@@ -19,7 +19,7 @@ parameters {
       }
       } 
  stage ('TF plan') { 
-   when { expression { return env.Action == 'plan' && env.Action == 'plan&apply' } }
+   when { expression { return env.Action == 'plan' or env.Action == 'plan&apply' } }
    steps {
    sh '''
    cd tf-script/S3/
