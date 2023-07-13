@@ -4,7 +4,7 @@ tools {
   terraform 'terraform'
 }
 parameters { 
-  choice(choices: ['plan', 'apply', 'destroy-plan', 'destroy'], description: 'Please Select the Action', name: 'Action')
+  choice(choices: ['plan', 'plan&apply', 'destroy-plan', 'destroy'], description: 'Please Select the Action', name: 'Action')
   string(defaultValue: 'dev-ecr-1', name: 'Name' ,description: 'Please Enter the name for ECR')
 }
  stages { 
@@ -19,7 +19,7 @@ parameters {
       }
       } 
  stage ('TF plan') { 
-   when { expression { return env.Action == 'plan' } }
+   when { expression { return env.Action == 'plan' && return env.Action == 'plan&apply'} }
    steps {
    sh '''
    cd tf-script/S3/
@@ -29,13 +29,7 @@ parameters {
    }
 stage('TF Apply') {
     // only execute stage if apply is desired
-    steps {
-    sh '''
-    cd tf-script/S3/
-    terraform plan  -var bucket_name=${Name} -out=tfplan.out
-    '''
-    }
-    when { expression { return env.Action == 'apply' } }
+    when { expression { return env.Action == 'plan&apply' } }
     steps {
       // query for user approval of plan
       input(message: 'Click "proceed" to approve the above Terraform Plan')
